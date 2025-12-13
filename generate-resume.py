@@ -128,7 +128,7 @@ def add_role_header(document, title, company_location, date):
     cell_1 = table.cell(0, 0)
     p1 = cell_1.paragraphs[0]
     p1.paragraph_format.space_before = Pt(1)
-    p1.paragraph_format.space_after = Pt(1)
+    p1.paragraph_format.space_after = Pt(0.5)
     r1 = p1.add_run(title)
     r1.bold = True
     r1.font.size = Pt(11)
@@ -141,6 +141,8 @@ def add_role_header(document, title, company_location, date):
     cell_2.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
 
     p2 = cell_2.paragraphs[0]
+    p2.paragraph_format.space_before = Pt(1)
+    p2.paragraph_format.space_after = Pt(0)
     p2.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
     r2 = p2.add_run(date)
     r2.bold = True
@@ -187,7 +189,8 @@ for company in experience_data['companies']:
         add_role_header(doc, role['title'], "", role['date'])
         for bullet in role['bullets']:
             bullet_p = doc.add_paragraph(bullet, style='List Bullet')
-            bullet_p.paragraph_format.space_after = Pt(1)
+            bullet_p.paragraph_format.space_after = Pt(0)
+            bullet_p.paragraph_format.space_before = Pt(0)
             bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
 
 # Earlier Career
