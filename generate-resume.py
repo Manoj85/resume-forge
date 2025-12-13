@@ -200,10 +200,27 @@ for company in experience_data['companies']:
 
 # Earlier Career
 add_section_header(doc, section_labels['earlier_career'])
-ec_title = doc.add_paragraph(experience_data['earlier_career']['title'], style='Normal')
-ec_title.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
-ec_desc = doc.add_paragraph(experience_data['earlier_career']['description'])
-ec_desc.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
+# Additional Companies (Earlier Career Details)
+if 'additional_companies' in experience_data:
+    for company in experience_data['additional_companies']:
+        # Add company header
+        company_p = doc.add_paragraph()
+        company_run = company_p.add_run(f"{company['company']} | {company['location']}")
+        company_run.bold = True
+        company_run.font.size = Pt(12)
+        company_run.font.color.rgb = RGBColor(46, 64, 83)
+        company_p.paragraph_format.space_before = Pt(3)
+        company_p.paragraph_format.space_after = Pt(1)
+
+        # Add roles under this company
+        for role in company['roles']:
+            add_role_header(doc, role['title'], "", role['date'])
+            for bullet in role['bullets']:
+                bullet_p = doc.add_paragraph(bullet, style='List Bullet')
+                bullet_p.paragraph_format.space_after = Pt(0)
+                bullet_p.paragraph_format.space_before = Pt(0)
+                bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
 
 # --- EDUCATION ---
 add_section_header(doc, section_labels['education'])
