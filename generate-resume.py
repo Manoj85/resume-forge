@@ -101,10 +101,10 @@ left_cell = header_table.cell(0, 0)
 left_cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
 left_p = left_cell.paragraphs[0]
 left_p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-add_hyperlink(left_p, f"mailto:{personal_info['email']}", personal_info['email'], font_size=Pt(9), color=RGBColor(0, 102, 204))
+add_hyperlink(left_p, f"mailto:{personal_info['email']}", personal_info['email'], font_size=Pt(8), color=RGBColor(0, 102, 204))
 left_p.add_run('\n')
 phone_run = left_p.add_run(personal_info['phone'])
-phone_run.font.size = Pt(9)
+phone_run.font.size = Pt(8)
 
 # Center column: Name
 center_cell = header_table.cell(0, 1)
@@ -121,9 +121,9 @@ right_cell = header_table.cell(0, 2)
 right_cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
 right_p = right_cell.paragraphs[0]
 right_p.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-add_hyperlink(right_p, personal_info['linkedin'], 'LinkedIn', font_size=Pt(9), color=RGBColor(0, 102, 204))
-right_p.add_run(' | ').font.size = Pt(9)
-add_hyperlink(right_p, personal_info['github'], 'GitHub', font_size=Pt(9), color=RGBColor(0, 102, 204))
+add_hyperlink(right_p, personal_info['linkedin'], 'LinkedIn', font_size=Pt(8), color=RGBColor(0, 102, 204))
+right_p.add_run(' | ').font.size = Pt(8)
+add_hyperlink(right_p, personal_info['github'], 'GitHub', font_size=Pt(8), color=RGBColor(0, 102, 204))
 
 # Remove the empty first paragraph in header to reduce space
 if header_para.text == '':
@@ -134,14 +134,14 @@ if header_para.text == '':
 style = doc.styles['Normal']
 font = style.font
 font.name = 'Arial'
-font.size = Pt(9)
+font.size = Pt(8)
 
 # Function to add section header (without background)
 def add_section_header(document, text):
     p = document.add_paragraph()
     runner = p.add_run(text.upper())
     runner.bold = True
-    runner.font.size = Pt(11)
+    runner.font.size = Pt(10)
     runner.font.color.rgb = RGBColor(46, 64, 83)  # Dark blue text
 
     p.paragraph_format.space_before = Pt(3)
@@ -170,7 +170,7 @@ def add_role_header(document, title, company_location, date):
     p1.paragraph_format.space_after = Pt(0)
     r1 = p1.add_run(title)
     r1.bold = True
-    r1.font.size = Pt(10)
+    r1.font.size = Pt(9)
     r1.font.color.rgb = RGBColor(46, 64, 83) # Dark Blue/Grey
 
     # Date Cell
@@ -185,7 +185,7 @@ def add_role_header(document, title, company_location, date):
     p2.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
     r2 = p2.add_run(date)
     r2.bold = True
-    r2.font.size = Pt(10)
+    r2.font.size = Pt(9)
 
     # Company Line below title (only if provided - for backward compatibility)
     if company_location:
@@ -220,7 +220,7 @@ for company in experience_data['companies']:
     company_p = doc.add_paragraph()
     company_run = company_p.add_run(f"{company['company']} | {company['location']}")
     company_run.bold = True
-    company_run.font.size = Pt(11)
+    company_run.font.size = Pt(10)
     company_run.font.color.rgb = RGBColor(46, 64, 83)
     company_p.paragraph_format.space_before = Pt(2)
     company_p.paragraph_format.space_after = Pt(0)
@@ -232,9 +232,10 @@ for company in experience_data['companies']:
             bullet_p = doc.add_paragraph(bullet, style='List Bullet')
             bullet_p.paragraph_format.space_after = Pt(0)
             bullet_p.paragraph_format.space_before = Pt(0)
+            bullet_p.paragraph_format.line_spacing = 1.0
             bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
             for run in bullet_p.runs:
-                run.font.size = Pt(9)
+                run.font.size = Pt(8)
 
 # Earlier Career
 add_section_header(doc, section_labels['earlier_career'])
@@ -246,7 +247,7 @@ if 'additional_companies' in experience_data:
         company_p = doc.add_paragraph()
         company_run = company_p.add_run(f"{company['company']} | {company['location']}")
         company_run.bold = True
-        company_run.font.size = Pt(11)
+        company_run.font.size = Pt(10)
         company_run.font.color.rgb = RGBColor(46, 64, 83)
         company_p.paragraph_format.space_before = Pt(2)
         company_p.paragraph_format.space_after = Pt(0)
@@ -258,9 +259,10 @@ if 'additional_companies' in experience_data:
                 bullet_p = doc.add_paragraph(bullet, style='List Bullet')
                 bullet_p.paragraph_format.space_after = Pt(0)
                 bullet_p.paragraph_format.space_before = Pt(0)
+                bullet_p.paragraph_format.line_spacing = 1.0
                 bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
                 for run in bullet_p.runs:
-                    run.font.size = Pt(9)
+                    run.font.size = Pt(8)
 
 # --- EDUCATION ---
 add_section_header(doc, section_labels['education'])
@@ -304,7 +306,7 @@ for i, cert in enumerate(all_certs):
     p.paragraph_format.space_after = Pt(0)
     # Add bullet character
     run = p.add_run(f"• {cert}")
-    run.font.size = Pt(9)
+    run.font.size = Pt(8)
 
 # Save document with versioning
 output_dir = "generated"
