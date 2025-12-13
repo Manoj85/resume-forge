@@ -101,8 +101,7 @@ left_cell = header_table.cell(0, 0)
 left_cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
 left_p = left_cell.paragraphs[0]
 left_p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-email_run = left_p.add_run(personal_info['email'])
-email_run.font.size = Pt(9)
+add_hyperlink(left_p, f"mailto:{personal_info['email']}", personal_info['email'], font_size=Pt(9), color=RGBColor(0, 102, 204))
 left_p.add_run('\n')
 phone_run = left_p.add_run(personal_info['phone'])
 phone_run.font.size = Pt(9)
