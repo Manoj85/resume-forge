@@ -237,8 +237,33 @@ for degree in education_data['degrees']:
 
 # --- CERTIFICATIONS ---
 add_section_header(doc, section_labels['certifications'])
-for cert in certifications_data['certifications']:
-    doc.add_paragraph(cert)
+
+# Create a 2-column table for certifications (compact layout)
+cert_list = certifications_data['certifications']
+# Split each certification line by ' | ' to get individual certs
+all_certs = []
+for cert_line in cert_list:
+    all_certs.extend([c.strip() for c in cert_line.split(' | ')])
+
+# Create table with 2 columns
+num_rows = (len(all_certs) + 1) // 2  # Calculate rows needed
+cert_table = doc.add_table(rows=num_rows, cols=2)
+cert_table.allow_autofit = False
+cert_table.columns[0].width = Inches(3.75)
+cert_table.columns[1].width = Inches(3.75)
+
+# Populate table with certifications
+for i, cert in enumerate(all_certs):
+    row = i // 2
+    col = i % 2
+    cell = cert_table.cell(row, col)
+    cell.width = Inches(3.75)
+    p = cell.paragraphs[0]
+    p.paragraph_format.space_before = Pt(0)
+    p.paragraph_format.space_after = Pt(1)
+    # Add bullet character
+    run = p.add_run(f"• {cert}")
+    run.font.size = Pt(10)
 
 # Save document with versioning
 output_dir = "generated"
