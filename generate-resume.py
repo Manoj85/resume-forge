@@ -136,6 +136,11 @@ font = style.font
 font.name = 'Arial'
 font.size = Pt(8)
 
+# Modify List Bullet style to reduce indent
+list_bullet_style = doc.styles['List Bullet']
+list_bullet_style.paragraph_format.left_indent = Inches(0.15)
+list_bullet_style.paragraph_format.first_line_indent = Inches(-0.15)
+
 # Function to add section header (without background)
 def add_section_header(document, text):
     p = document.add_paragraph()
@@ -144,6 +149,7 @@ def add_section_header(document, text):
     runner.font.size = Pt(9)
     runner.font.color.rgb = RGBColor(46, 64, 83)  # Dark blue text
 
+    p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
     p.paragraph_format.space_before = Pt(3)
     p.paragraph_format.space_after = Pt(0)
 
@@ -233,7 +239,6 @@ for company in experience_data['companies']:
             bullet_p.paragraph_format.space_after = Pt(0)
             bullet_p.paragraph_format.space_before = Pt(0)
             bullet_p.paragraph_format.line_spacing = 1.0
-            bullet_p.paragraph_format.left_indent = Inches(0.25)
             bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
             for run in bullet_p.runs:
                 run.font.size = Pt(8)
@@ -261,7 +266,6 @@ if 'additional_companies' in experience_data:
                 bullet_p.paragraph_format.space_after = Pt(0)
                 bullet_p.paragraph_format.space_before = Pt(0)
                 bullet_p.paragraph_format.line_spacing = 1.0
-                bullet_p.paragraph_format.left_indent = Inches(0.25)
                 bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
                 for run in bullet_p.runs:
                     run.font.size = Pt(8)
