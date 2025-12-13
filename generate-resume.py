@@ -51,8 +51,8 @@ def add_section_header(document, text):
     shading_elm = parse_xml(r'<w:shd {} w:fill="2E4053"/>'.format(nsdecls('w')))
     p._p.get_or_add_pPr().append(shading_elm)
 
-    p.paragraph_format.space_before = Pt(8)
-    p.paragraph_format.space_after = Pt(3)
+    p.paragraph_format.space_before = Pt(6)
+    p.paragraph_format.space_after = Pt(2)
 
 def add_role_header(document, title, company_location, date):
     # Table for layout: Title (Left) | Date (Right)
