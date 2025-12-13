@@ -1,0 +1,16 @@
+{
+  "categories": [
+    {
+      "category": "Category Name 1:",
+      "items": "Skill 1, Skill 2, Skill 3, Technology A, Technology B."
+    },
+    {
+      "category": "Category Name 2:",
+      "items": "Skill 4, Skill 5, Technology C, Technology D."
+    },
+    {
+      "category": "Category Name 3:",
+      "items": "Skill 6, Skill 7, Framework X, Framework Y."
+    }
+  ]
+}

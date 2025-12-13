@@ -1,0 +1,27 @@
+{
+  "roles": [
+    {
+      "title": "Job Title",
+      "company_location": "Company Name | City, State",
+      "date": "Month Year – Present",
+      "bullets": [
+        "Achievement or responsibility bullet point 1.",
+        "Achievement or responsibility bullet point 2.",
+        "Achievement or responsibility bullet point 3."
+      ]
+    },
+    {
+      "title": "Previous Job Title",
+      "company_location": "Previous Company | City, State",
+      "date": "Month Year – Month Year",
+      "bullets": [
+        "Achievement or responsibility bullet point 1.",
+        "Achievement or responsibility bullet point 2."
+      ]
+    }
+  ],
+  "earlier_career": {
+    "title": "Job Title | Location | Date Range",
+    "description": "Brief description of earlier career experience and accomplishments."
+  }
+}

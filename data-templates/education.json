@@ -1,0 +1,12 @@
+{
+  "degrees": [
+    {
+      "degree": "Degree Name",
+      "institution": "University Name, City, State"
+    },
+    {
+      "degree": "Previous Degree Name",
+      "institution": "Previous University, City, State"
+    }
+  ]
+}
