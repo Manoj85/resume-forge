@@ -35,8 +35,12 @@ for section in sections:
     section.right_margin = Inches(0.5)
 
 # --- DOCUMENT HEADER ---
-# Access the header of the first section
-header = sections[0].header
+# Enable different first page header and use first_page_header for first page only
+for section in sections:
+    section.different_first_page_header_footer = True
+
+# Access the first page header (appears only on first page)
+header = sections[0].first_page_header
 header_para = header.paragraphs[0] if header.paragraphs else header.add_paragraph()
 
 # Create 3-column table in header: Email/Phone | Name | LinkedIn/GitHub
@@ -62,7 +66,7 @@ center_cell = header_table.cell(0, 1)
 center_cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
 center_p = center_cell.paragraphs[0]
 center_p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-name_run = center_p.add_run(personal_info['name'].title())
+name_run = center_p.add_run(personal_info['name'].upper())
 name_run.bold = True
 name_run.font.size = Pt(12)
 name_run.font.color.rgb = RGBColor(46, 64, 83)
@@ -78,22 +82,10 @@ right_p.add_run('\n')
 github_run = right_p.add_run(personal_info['github'])
 github_run.font.size = Pt(9)
 
-# Add location below the header table (centered)
-location_p = header.add_paragraph()
-location_p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-location_run = location_p.add_run(personal_info['location'])
-location_run.font.size = Pt(9)
-location_p.paragraph_format.space_after = Pt(0)
-location_p.paragraph_format.space_before = Pt(0)
-
 # Remove the empty first paragraph in header to reduce space
 if header_para.text == '':
     p_element = header_para._element
     p_element.getparent().remove(p_element)
-
-# Make header appear only on first page
-for section in sections:
-    section.different_first_page_header_footer = True
 
 # --- STYLES & FORMATTING ---
 style = doc.styles['Normal']
