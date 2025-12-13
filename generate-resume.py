@@ -4,8 +4,49 @@ from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.enum.table import WD_ALIGN_VERTICAL
 from docx.oxml.ns import nsdecls
 from docx.oxml import parse_xml
+from docx.oxml import OxmlElement
 import os
 import json
+
+# Function to add hyperlink to a paragraph
+def add_hyperlink(paragraph, url, text, font_size=Pt(9), color=RGBColor(0, 0, 255)):
+    """
+    Add a hyperlink to a paragraph.
+    """
+    part = paragraph.part
+    r_id = part.relate_to(url, 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink', is_external=True)
+    
+    hyperlink = OxmlElement('w:hyperlink')
+    hyperlink.set('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id', r_id)
+    
+    new_run = OxmlElement('w:r')
+    rPr = OxmlElement('w:rPr')
+    
+    # Set font size
+    sz = OxmlElement('w:sz')
+    sz.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val', str(int(font_size.pt * 2)))
+    rPr.append(sz)
+    
+    # Set color
+    c = OxmlElement('w:color')
+    c.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val', '%02X%02X%02X' % (color[0], color[1], color[2]))
+    rPr.append(c)
+    
+    # Set underline
+    u = OxmlElement('w:u')
+    u.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val', 'single')
+    rPr.append(u)
+    
+    new_run.append(rPr)
+    
+    t = OxmlElement('w:t')
+    t.text = text
+    new_run.append(t)
+    
+    hyperlink.append(new_run)
+    paragraph._p.append(hyperlink)
+    
+    return hyperlink
 
 # --- LOAD DATA FROM JSON FILES ---
 def load_json(filename):
@@ -81,11 +122,9 @@ right_cell = header_table.cell(0, 2)
 right_cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
 right_p = right_cell.paragraphs[0]
 right_p.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-linkedin_run = right_p.add_run(personal_info['linkedin'])
-linkedin_run.font.size = Pt(9)
+add_hyperlink(right_p, personal_info['linkedin'], 'LinkedIn', font_size=Pt(9), color=RGBColor(0, 102, 204))
 right_p.add_run('\n')
-github_run = right_p.add_run(personal_info['github'])
-github_run.font.size = Pt(9)
+add_hyperlink(right_p, personal_info['github'], 'GitHub', font_size=Pt(9), color=RGBColor(0, 102, 204))
 
 # Remove the empty first paragraph in header to reduce space
 if header_para.text == '':
