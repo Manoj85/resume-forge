@@ -46,9 +46,14 @@ header_para = header.paragraphs[0] if header.paragraphs else header.add_paragrap
 # Create 3-column table in header: Email/Phone | Name | LinkedIn/GitHub
 header_table = header.add_table(rows=1, cols=3, width=Inches(7.5))
 header_table.allow_autofit = False
-header_table.columns[0].width = Inches(2.5)
-header_table.columns[1].width = Inches(2.5)
-header_table.columns[2].width = Inches(2.5)
+header_table.columns[0].width = Inches(2.0)
+header_table.columns[1].width = Inches(3.5)
+header_table.columns[2].width = Inches(2.0)
+
+# Set cell widths directly to ensure they're respected
+header_table.cell(0, 0).width = Inches(2.0)
+header_table.cell(0, 1).width = Inches(3.5)
+header_table.cell(0, 2).width = Inches(2.0)
 
 # Left column: Email and Phone (stacked)
 left_cell = header_table.cell(0, 0)
@@ -68,7 +73,7 @@ center_p = center_cell.paragraphs[0]
 center_p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 name_run = center_p.add_run(personal_info['name'].upper())
 name_run.bold = True
-name_run.font.size = Pt(12)
+name_run.font.size = Pt(18)
 name_run.font.color.rgb = RGBColor(46, 64, 83)
 
 # Right column: LinkedIn and GitHub (stacked)
