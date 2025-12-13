@@ -108,11 +108,33 @@ name.bold = True
 name.font.size = Pt(22)
 name.font.color.rgb = RGBColor(46, 64, 83) # Dark Slate Blue
 
-contact = doc.add_paragraph()
-contact.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-contact.add_run(f"{personal_info['location']} | {personal_info['phone']} | {personal_info['email']}")
-contact.add_run(f"\n{personal_info['linkedin']} | {personal_info['github']}")
-contact.paragraph_format.space_after = Pt(6)
+# Location (centered)
+location = doc.add_paragraph()
+location.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+location.add_run(personal_info['location'])
+location.paragraph_format.space_after = Pt(2)
+
+# Contact info table: Email/Phone (Left) | LinkedIn/GitHub (Right)
+contact_table = doc.add_table(rows=1, cols=2)
+contact_table.allow_autofit = False
+contact_table.width = Inches(7.5)
+contact_table.columns[0].width = Inches(3.75)
+contact_table.columns[1].width = Inches(3.75)
+
+# Left cell: Email and Phone
+left_cell = contact_table.cell(0, 0)
+left_p = left_cell.paragraphs[0]
+left_p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+left_p.add_run(f"{personal_info['email']} | {personal_info['phone']}")
+
+# Right cell: LinkedIn and GitHub
+right_cell = contact_table.cell(0, 1)
+right_p = right_cell.paragraphs[0]
+right_p.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+right_p.add_run(f"{personal_info['linkedin']} | {personal_info['github']}")
+
+# Add spacing after contact section
+doc.add_paragraph().paragraph_format.space_after = Pt(4)
 
 # --- PROFESSIONAL SUMMARY ---
 add_section_header(doc, section_labels['professional_summary'])
@@ -125,6 +147,7 @@ add_section_header(doc, section_labels['key_skills'])
 for skill_category in skills_data['categories']:
     p = doc.add_paragraph()
     p.paragraph_format.space_after = Pt(1)
+    p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
     cat_run = p.add_run(skill_category['category'] + " ")
     cat_run.bold = True
     p.add_run(skill_category['items'])
@@ -148,11 +171,14 @@ for company in experience_data['companies']:
         for bullet in role['bullets']:
             bullet_p = doc.add_paragraph(bullet, style='List Bullet')
             bullet_p.paragraph_format.space_after = Pt(1)
+            bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
 
 # Earlier Career
 add_section_header(doc, section_labels['earlier_career'])
-doc.add_paragraph(experience_data['earlier_career']['title'], style='Normal')
-doc.add_paragraph(experience_data['earlier_career']['description'])
+ec_title = doc.add_paragraph(experience_data['earlier_career']['title'], style='Normal')
+ec_title.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+ec_desc = doc.add_paragraph(experience_data['earlier_career']['description'])
+ec_desc.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
 
 # --- EDUCATION ---
 add_section_header(doc, section_labels['education'])
