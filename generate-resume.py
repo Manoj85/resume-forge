@@ -46,13 +46,13 @@ def add_section_header(document, text):
     runner.bold = True
     runner.font.size = Pt(12)
     runner.font.color.rgb = RGBColor(255, 255, 255)  # White text
-    
+
     # Add dark blue shading (Professional, similar to high-end templates)
     shading_elm = parse_xml(r'<w:shd {} w:fill="2E4053"/>'.format(nsdecls('w')))
     p._p.get_or_add_pPr().append(shading_elm)
-    
-    p.paragraph_format.space_before = Pt(12)
-    p.paragraph_format.space_after = Pt(4)
+
+    p.paragraph_format.space_before = Pt(8)
+    p.paragraph_format.space_after = Pt(3)
 
 def add_role_header(document, title, company_location, date):
     # Table for layout: Title (Left) | Date (Right)
@@ -73,6 +73,8 @@ def add_role_header(document, title, company_location, date):
     # Title Cell
     cell_1 = table.cell(0, 0)
     p1 = cell_1.paragraphs[0]
+    p1.paragraph_format.space_before = Pt(2)
+    p1.paragraph_format.space_after = Pt(2)
     r1 = p1.add_run(title)
     r1.bold = True
     r1.font.size = Pt(11)
@@ -96,7 +98,7 @@ def add_role_header(document, title, company_location, date):
         p_sub = document.add_paragraph()
         r_sub = p_sub.add_run(company_location)
         r_sub.italic = True
-        p_sub.paragraph_format.space_after = Pt()
+        p_sub.paragraph_format.space_after = Pt(2)
 
 # --- HEADER SECTION ---
 header = doc.add_paragraph()
@@ -110,7 +112,7 @@ contact = doc.add_paragraph()
 contact.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 contact.add_run(f"{personal_info['location']} | {personal_info['phone']} | {personal_info['email']}")
 contact.add_run(f"\n{personal_info['linkedin']} | {personal_info['github']}")
-contact.paragraph_format.space_after = Pt(10)
+contact.paragraph_format.space_after = Pt(6)
 
 # --- PROFESSIONAL SUMMARY ---
 add_section_header(doc, section_labels['professional_summary'])
@@ -122,7 +124,7 @@ add_section_header(doc, section_labels['key_skills'])
 
 for skill_category in skills_data['categories']:
     p = doc.add_paragraph()
-    p.paragraph_format.space_after = Pt(0)
+    p.paragraph_format.space_after = Pt(1)
     cat_run = p.add_run(skill_category['category'] + " ")
     cat_run.bold = True
     p.add_run(skill_category['items'])
@@ -137,14 +139,15 @@ for company in experience_data['companies']:
     company_run.bold = True
     company_run.font.size = Pt(12)
     company_run.font.color.rgb = RGBColor(46, 64, 83)
-    company_p.paragraph_format.space_before = Pt(8)
-    company_p.paragraph_format.space_after = Pt(4)
+    company_p.paragraph_format.space_before = Pt(4)
+    company_p.paragraph_format.space_after = Pt(2)
 
     # Add roles under this company
     for role in company['roles']:
         add_role_header(doc, role['title'], "", role['date'])
         for bullet in role['bullets']:
-            doc.add_paragraph(bullet, style='List Bullet')
+            bullet_p = doc.add_paragraph(bullet, style='List Bullet')
+            bullet_p.paragraph_format.space_after = Pt(1)
 
 # Earlier Career
 add_section_header(doc, section_labels['earlier_career'])
