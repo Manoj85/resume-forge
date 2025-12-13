@@ -117,13 +117,13 @@ name_run.bold = True
 name_run.font.size = Pt(18)
 name_run.font.color.rgb = RGBColor(46, 64, 83)
 
-# Right column: LinkedIn and GitHub (stacked)
+# Right column: LinkedIn and GitHub (horizontal)
 right_cell = header_table.cell(0, 2)
 right_cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
 right_p = right_cell.paragraphs[0]
 right_p.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
 add_hyperlink(right_p, personal_info['linkedin'], 'LinkedIn', font_size=Pt(9), color=RGBColor(0, 102, 204))
-right_p.add_run('\n')
+right_p.add_run(' | ').font.size = Pt(9)
 add_hyperlink(right_p, personal_info['github'], 'GitHub', font_size=Pt(9), color=RGBColor(0, 102, 204))
 
 # Remove the empty first paragraph in header to reduce space
