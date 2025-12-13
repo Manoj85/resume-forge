@@ -1,22 +1,26 @@
 {
-  "roles": [
+  "companies": [
     {
-      "title": "Job Title",
-      "company_location": "Company Name | City, State",
-      "date": "Month Year – Present",
-      "bullets": [
-        "Achievement or responsibility bullet point 1.",
-        "Achievement or responsibility bullet point 2.",
-        "Achievement or responsibility bullet point 3."
-      ]
-    },
-    {
-      "title": "Previous Job Title",
-      "company_location": "Previous Company | City, State",
-      "date": "Month Year – Month Year",
-      "bullets": [
-        "Achievement or responsibility bullet point 1.",
-        "Achievement or responsibility bullet point 2."
+      "company": "Company Name",
+      "location": "City, State",
+      "roles": [
+        {
+          "title": "Job Title",
+          "date": "Month Year – Present",
+          "bullets": [
+            "Achievement or responsibility bullet point 1.",
+            "Achievement or responsibility bullet point 2.",
+            "Achievement or responsibility bullet point 3."
+          ]
+        },
+        {
+          "title": "Previous Job Title",
+          "date": "Month Year – Month Year",
+          "bullets": [
+            "Achievement or responsibility bullet point 1.",
+            "Achievement or responsibility bullet point 2."
+          ]
+        }
       ]
     }
   ],
