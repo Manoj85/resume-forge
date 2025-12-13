@@ -134,22 +134,18 @@ if header_para.text == '':
 style = doc.styles['Normal']
 font = style.font
 font.name = 'Arial'
-font.size = Pt(10)
+font.size = Pt(9)
 
-# Function to add a shaded background to headings (Sanjay Style)
+# Function to add section header (without background)
 def add_section_header(document, text):
     p = document.add_paragraph()
     runner = p.add_run(text.upper())
     runner.bold = True
-    runner.font.size = Pt(12)
-    runner.font.color.rgb = RGBColor(255, 255, 255)  # White text
+    runner.font.size = Pt(11)
+    runner.font.color.rgb = RGBColor(46, 64, 83)  # Dark blue text
 
-    # Add dark blue shading (Professional, similar to high-end templates)
-    shading_elm = parse_xml(r'<w:shd {} w:fill="2E4053"/>'.format(nsdecls('w')))
-    p._p.get_or_add_pPr().append(shading_elm)
-
-    p.paragraph_format.space_before = Pt(4)
-    p.paragraph_format.space_after = Pt(1)
+    p.paragraph_format.space_before = Pt(3)
+    p.paragraph_format.space_after = Pt(0)
 
 def add_role_header(document, title, company_location, date):
     # Table for layout: Title (Left) | Date (Right)
@@ -170,11 +166,11 @@ def add_role_header(document, title, company_location, date):
     # Title Cell
     cell_1 = table.cell(0, 0)
     p1 = cell_1.paragraphs[0]
-    p1.paragraph_format.space_before = Pt(1)
-    p1.paragraph_format.space_after = Pt(0.5)
+    p1.paragraph_format.space_before = Pt(0)
+    p1.paragraph_format.space_after = Pt(0)
     r1 = p1.add_run(title)
     r1.bold = True
-    r1.font.size = Pt(11)
+    r1.font.size = Pt(10)
     r1.font.color.rgb = RGBColor(46, 64, 83) # Dark Blue/Grey
 
     # Date Cell
@@ -184,12 +180,12 @@ def add_role_header(document, title, company_location, date):
     cell_2.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
 
     p2 = cell_2.paragraphs[0]
-    p2.paragraph_format.space_before = Pt(1)
+    p2.paragraph_format.space_before = Pt(0)
     p2.paragraph_format.space_after = Pt(0)
     p2.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
     r2 = p2.add_run(date)
     r2.bold = True
-    r2.font.size = Pt(11)
+    r2.font.size = Pt(10)
 
     # Company Line below title (only if provided - for backward compatibility)
     if company_location:
@@ -202,13 +198,15 @@ def add_role_header(document, title, company_location, date):
 add_section_header(doc, section_labels['professional_summary'])
 summary = doc.add_paragraph(summary_data['text'])
 summary.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+summary.paragraph_format.space_after = Pt(0)
 
 # --- KEY SKILLS ---
 add_section_header(doc, section_labels['key_skills'])
 
 for skill_category in skills_data['categories']:
     p = doc.add_paragraph()
-    p.paragraph_format.space_after = Pt(1)
+    p.paragraph_format.space_after = Pt(0)
+    p.paragraph_format.space_before = Pt(0)
     p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
     cat_run = p.add_run(skill_category['category'] + " ")
     cat_run.bold = True
@@ -222,10 +220,10 @@ for company in experience_data['companies']:
     company_p = doc.add_paragraph()
     company_run = company_p.add_run(f"{company['company']} | {company['location']}")
     company_run.bold = True
-    company_run.font.size = Pt(12)
+    company_run.font.size = Pt(11)
     company_run.font.color.rgb = RGBColor(46, 64, 83)
-    company_p.paragraph_format.space_before = Pt(3)
-    company_p.paragraph_format.space_after = Pt(1)
+    company_p.paragraph_format.space_before = Pt(2)
+    company_p.paragraph_format.space_after = Pt(0)
 
     # Add roles under this company
     for role in company['roles']:
@@ -235,6 +233,8 @@ for company in experience_data['companies']:
             bullet_p.paragraph_format.space_after = Pt(0)
             bullet_p.paragraph_format.space_before = Pt(0)
             bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+            for run in bullet_p.runs:
+                run.font.size = Pt(9)
 
 # Earlier Career
 add_section_header(doc, section_labels['earlier_career'])
@@ -246,10 +246,10 @@ if 'additional_companies' in experience_data:
         company_p = doc.add_paragraph()
         company_run = company_p.add_run(f"{company['company']} | {company['location']}")
         company_run.bold = True
-        company_run.font.size = Pt(12)
+        company_run.font.size = Pt(11)
         company_run.font.color.rgb = RGBColor(46, 64, 83)
-        company_p.paragraph_format.space_before = Pt(3)
-        company_p.paragraph_format.space_after = Pt(1)
+        company_p.paragraph_format.space_before = Pt(2)
+        company_p.paragraph_format.space_after = Pt(0)
 
         # Add roles under this company
         for role in company['roles']:
@@ -259,12 +259,15 @@ if 'additional_companies' in experience_data:
                 bullet_p.paragraph_format.space_after = Pt(0)
                 bullet_p.paragraph_format.space_before = Pt(0)
                 bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+                for run in bullet_p.runs:
+                    run.font.size = Pt(9)
 
 # --- EDUCATION ---
 add_section_header(doc, section_labels['education'])
 for degree in education_data['degrees']:
     edu_p = doc.add_paragraph()
-    edu_p.paragraph_format.space_after = Pt(1)
+    edu_p.paragraph_format.space_after = Pt(0)
+    edu_p.paragraph_format.space_before = Pt(0)
 
     # Degree name in bold
     degree_run = edu_p.add_run(degree['degree'])
@@ -298,10 +301,10 @@ for i, cert in enumerate(all_certs):
     cell.width = Inches(3.75)
     p = cell.paragraphs[0]
     p.paragraph_format.space_before = Pt(0)
-    p.paragraph_format.space_after = Pt(1)
+    p.paragraph_format.space_after = Pt(0)
     # Add bullet character
     run = p.add_run(f"• {cert}")
-    run.font.size = Pt(10)
+    run.font.size = Pt(9)
 
 # Save document with versioning
 output_dir = "generated"
