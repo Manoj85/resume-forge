@@ -1,6 +1,7 @@
 from docx import Document
 from docx.shared import Pt, RGBColor, Inches
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.enum.table import WD_ALIGN_VERTICAL
 from docx.oxml.ns import nsdecls
 from docx.oxml import parse_xml
 import os
@@ -28,10 +29,71 @@ doc = Document()
 # Set margins to 0.5 inches for all sides
 sections = doc.sections
 for section in sections:
-    section.top_margin = Inches(0.5)
-    section.bottom_margin = Inches(0.5)
+    section.top_margin = Inches(0.2)
+    section.bottom_margin = Inches(0.2)
     section.left_margin = Inches(0.5)
     section.right_margin = Inches(0.5)
+
+# --- DOCUMENT HEADER ---
+# Access the header of the first section
+header = sections[0].header
+header_para = header.paragraphs[0] if header.paragraphs else header.add_paragraph()
+
+# Create 3-column table in header: Email/Phone | Name | LinkedIn/GitHub
+header_table = header.add_table(rows=1, cols=3, width=Inches(7.5))
+header_table.allow_autofit = False
+header_table.columns[0].width = Inches(2.5)
+header_table.columns[1].width = Inches(2.5)
+header_table.columns[2].width = Inches(2.5)
+
+# Left column: Email and Phone (stacked)
+left_cell = header_table.cell(0, 0)
+left_cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+left_p = left_cell.paragraphs[0]
+left_p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+email_run = left_p.add_run(personal_info['email'])
+email_run.font.size = Pt(9)
+left_p.add_run('\n')
+phone_run = left_p.add_run(personal_info['phone'])
+phone_run.font.size = Pt(9)
+
+# Center column: Name
+center_cell = header_table.cell(0, 1)
+center_cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+center_p = center_cell.paragraphs[0]
+center_p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+name_run = center_p.add_run(personal_info['name'].title())
+name_run.bold = True
+name_run.font.size = Pt(12)
+name_run.font.color.rgb = RGBColor(46, 64, 83)
+
+# Right column: LinkedIn and GitHub (stacked)
+right_cell = header_table.cell(0, 2)
+right_cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+right_p = right_cell.paragraphs[0]
+right_p.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+linkedin_run = right_p.add_run(personal_info['linkedin'])
+linkedin_run.font.size = Pt(9)
+right_p.add_run('\n')
+github_run = right_p.add_run(personal_info['github'])
+github_run.font.size = Pt(9)
+
+# Add location below the header table (centered)
+location_p = header.add_paragraph()
+location_p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+location_run = location_p.add_run(personal_info['location'])
+location_run.font.size = Pt(9)
+location_p.paragraph_format.space_after = Pt(0)
+location_p.paragraph_format.space_before = Pt(0)
+
+# Remove the empty first paragraph in header to reduce space
+if header_para.text == '':
+    p_element = header_para._element
+    p_element.getparent().remove(p_element)
+
+# Make header appear only on first page
+for section in sections:
+    section.different_first_page_header_footer = True
 
 # --- STYLES & FORMATTING ---
 style = doc.styles['Normal']
@@ -51,8 +113,8 @@ def add_section_header(document, text):
     shading_elm = parse_xml(r'<w:shd {} w:fill="2E4053"/>'.format(nsdecls('w')))
     p._p.get_or_add_pPr().append(shading_elm)
 
-    p.paragraph_format.space_before = Pt(6)
-    p.paragraph_format.space_after = Pt(2)
+    p.paragraph_format.space_before = Pt(4)
+    p.paragraph_format.space_after = Pt(1)
 
 def add_role_header(document, title, company_location, date):
     # Table for layout: Title (Left) | Date (Right)
@@ -73,8 +135,8 @@ def add_role_header(document, title, company_location, date):
     # Title Cell
     cell_1 = table.cell(0, 0)
     p1 = cell_1.paragraphs[0]
-    p1.paragraph_format.space_before = Pt(2)
-    p1.paragraph_format.space_after = Pt(2)
+    p1.paragraph_format.space_before = Pt(1)
+    p1.paragraph_format.space_after = Pt(1)
     r1 = p1.add_run(title)
     r1.bold = True
     r1.font.size = Pt(11)
@@ -84,7 +146,6 @@ def add_role_header(document, title, company_location, date):
     cell_2 = table.cell(0, 1)
 
     # Set cell vertical alignment
-    from docx.enum.table import WD_ALIGN_VERTICAL
     cell_2.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
 
     p2 = cell_2.paragraphs[0]
@@ -98,43 +159,7 @@ def add_role_header(document, title, company_location, date):
         p_sub = document.add_paragraph()
         r_sub = p_sub.add_run(company_location)
         r_sub.italic = True
-        p_sub.paragraph_format.space_after = Pt(2)
-
-# --- HEADER SECTION ---
-header = doc.add_paragraph()
-header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-name = header.add_run(personal_info['name'])
-name.bold = True
-name.font.size = Pt(22)
-name.font.color.rgb = RGBColor(46, 64, 83) # Dark Slate Blue
-
-# Location (centered)
-location = doc.add_paragraph()
-location.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-location.add_run(personal_info['location'])
-location.paragraph_format.space_after = Pt(2)
-
-# Contact info table: Email/Phone (Left) | LinkedIn/GitHub (Right)
-contact_table = doc.add_table(rows=1, cols=2)
-contact_table.allow_autofit = False
-contact_table.width = Inches(7.5)
-contact_table.columns[0].width = Inches(3.75)
-contact_table.columns[1].width = Inches(3.75)
-
-# Left cell: Email and Phone
-left_cell = contact_table.cell(0, 0)
-left_p = left_cell.paragraphs[0]
-left_p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-left_p.add_run(f"{personal_info['email']} | {personal_info['phone']}")
-
-# Right cell: LinkedIn and GitHub
-right_cell = contact_table.cell(0, 1)
-right_p = right_cell.paragraphs[0]
-right_p.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-right_p.add_run(f"{personal_info['linkedin']} | {personal_info['github']}")
-
-# Add spacing after contact section
-doc.add_paragraph().paragraph_format.space_after = Pt(4)
+        p_sub.paragraph_format.space_after = Pt(1)
 
 # --- PROFESSIONAL SUMMARY ---
 add_section_header(doc, section_labels['professional_summary'])
@@ -162,8 +187,8 @@ for company in experience_data['companies']:
     company_run.bold = True
     company_run.font.size = Pt(12)
     company_run.font.color.rgb = RGBColor(46, 64, 83)
-    company_p.paragraph_format.space_before = Pt(4)
-    company_p.paragraph_format.space_after = Pt(2)
+    company_p.paragraph_format.space_before = Pt(3)
+    company_p.paragraph_format.space_after = Pt(1)
 
     # Add roles under this company
     for role in company['roles']:
@@ -184,7 +209,7 @@ ec_desc.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
 add_section_header(doc, section_labels['education'])
 for degree in education_data['degrees']:
     edu_p = doc.add_paragraph()
-    edu_p.paragraph_format.space_after = Pt(2)
+    edu_p.paragraph_format.space_after = Pt(1)
 
     # Degree name in bold
     degree_run = edu_p.add_run(degree['degree'])
