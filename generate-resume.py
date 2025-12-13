@@ -141,7 +141,7 @@ def add_section_header(document, text):
     p = document.add_paragraph()
     runner = p.add_run(text.upper())
     runner.bold = True
-    runner.font.size = Pt(10)
+    runner.font.size = Pt(9)
     runner.font.color.rgb = RGBColor(46, 64, 83)  # Dark blue text
 
     p.paragraph_format.space_before = Pt(3)
@@ -220,8 +220,8 @@ for company in experience_data['companies']:
     company_p = doc.add_paragraph()
     company_run = company_p.add_run(f"{company['company']} | {company['location']}")
     company_run.bold = True
-    company_run.font.size = Pt(10)
-    company_run.font.color.rgb = RGBColor(46, 64, 83)
+    company_run.font.size = Pt(9)
+    company_run.font.color.rgb = RGBColor(0, 51, 102)  # Darker blue
     company_p.paragraph_format.space_before = Pt(2)
     company_p.paragraph_format.space_after = Pt(0)
 
@@ -233,6 +233,7 @@ for company in experience_data['companies']:
             bullet_p.paragraph_format.space_after = Pt(0)
             bullet_p.paragraph_format.space_before = Pt(0)
             bullet_p.paragraph_format.line_spacing = 1.0
+            bullet_p.paragraph_format.left_indent = Inches(0.25)
             bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
             for run in bullet_p.runs:
                 run.font.size = Pt(8)
@@ -247,8 +248,8 @@ if 'additional_companies' in experience_data:
         company_p = doc.add_paragraph()
         company_run = company_p.add_run(f"{company['company']} | {company['location']}")
         company_run.bold = True
-        company_run.font.size = Pt(10)
-        company_run.font.color.rgb = RGBColor(46, 64, 83)
+        company_run.font.size = Pt(9)
+        company_run.font.color.rgb = RGBColor(0, 51, 102)  # Darker blue
         company_p.paragraph_format.space_before = Pt(2)
         company_p.paragraph_format.space_after = Pt(0)
 
@@ -260,6 +261,7 @@ if 'additional_companies' in experience_data:
                 bullet_p.paragraph_format.space_after = Pt(0)
                 bullet_p.paragraph_format.space_before = Pt(0)
                 bullet_p.paragraph_format.line_spacing = 1.0
+                bullet_p.paragraph_format.left_indent = Inches(0.25)
                 bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
                 for run in bullet_p.runs:
                     run.font.size = Pt(8)
