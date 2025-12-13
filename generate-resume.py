@@ -141,7 +141,7 @@ list_bullet_style = doc.styles['List Bullet']
 list_bullet_style.paragraph_format.left_indent = Inches(0.15)
 list_bullet_style.paragraph_format.first_line_indent = Inches(-0.15)
 
-# Function to add section header (without background)
+# Function to add section header (without background) with horizontal line
 def add_section_header(document, text):
     p = document.add_paragraph()
     runner = p.add_run(text.upper())
@@ -152,6 +152,17 @@ def add_section_header(document, text):
     p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
     p.paragraph_format.space_before = Pt(3)
     p.paragraph_format.space_after = Pt(0)
+    
+    # Add bottom border (horizontal line)
+    pPr = p._p.get_or_add_pPr()
+    pBdr = OxmlElement('w:pBdr')
+    bottom = OxmlElement('w:bottom')
+    bottom.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val', 'single')
+    bottom.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}sz', '6')  # Line thickness
+    bottom.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}space', '1')
+    bottom.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}color', '2E4053')  # Dark blue color
+    pBdr.append(bottom)
+    pPr.append(pBdr)
 
 def add_role_header(document, title, company_location, date):
     # Table for layout: Title (Left) | Date (Right)
