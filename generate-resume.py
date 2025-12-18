@@ -253,6 +253,18 @@ for company in experience_data['companies']:
             bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
             for run in bullet_p.runs:
                 run.font.size = Pt(8)
+        
+        # Add technologies if present
+        if 'technologies' in role:
+            tech_p = doc.add_paragraph()
+            tech_p.paragraph_format.space_before = Pt(1)
+            tech_p.paragraph_format.space_after = Pt(2)
+            tech_run_label = tech_p.add_run("Technologies: ")
+            tech_run_label.bold = True
+            tech_run_label.font.size = Pt(7)
+            tech_run_val = tech_p.add_run(role['technologies'])
+            tech_run_val.italic = True
+            tech_run_val.font.size = Pt(7)
 
 # Earlier Career
 add_section_header(doc, section_labels['earlier_career'])
@@ -260,7 +272,7 @@ add_section_header(doc, section_labels['earlier_career'])
 # Additional Companies (Earlier Career Details)
 if 'additional_companies' in experience_data:
     for company in experience_data['additional_companies']:
-        # Add company header
+        # Add company header for earlier career too
         company_p = doc.add_paragraph()
         company_run = company_p.add_run(f"{company['company']} | {company['location']}")
         company_run.bold = True
@@ -269,7 +281,6 @@ if 'additional_companies' in experience_data:
         company_p.paragraph_format.space_before = Pt(2)
         company_p.paragraph_format.space_after = Pt(0)
 
-        # Add roles under this company
         for role in company['roles']:
             add_role_header(doc, role['title'], "", role['date'])
             for bullet in role['bullets']:
@@ -280,6 +291,18 @@ if 'additional_companies' in experience_data:
                 bullet_p.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
                 for run in bullet_p.runs:
                     run.font.size = Pt(8)
+            
+            # Add technologies for earlier career roles too
+            if 'technologies' in role:
+                tech_p = doc.add_paragraph()
+                tech_p.paragraph_format.space_before = Pt(1)
+                tech_p.paragraph_format.space_after = Pt(2)
+                tech_run_label = tech_p.add_run("Technologies: ")
+                tech_run_label.bold = True
+                tech_run_label.font.size = Pt(7)
+                tech_run_val = tech_p.add_run(role['technologies'])
+                tech_run_val.italic = True
+                tech_run_val.font.size = Pt(7)
 
 # --- EDUCATION ---
 add_section_header(doc, section_labels['education'])
